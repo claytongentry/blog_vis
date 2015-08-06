@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
   <script>
 
-    var height = 400, width = 300, rect_width = 30, rect_padding = 2, data_len;
+    var height = 450, width = 300, rect_width = 30, rect_padding = 2, data_len;
 
     d3.json('data.json', function(data) {
 
@@ -48,13 +48,10 @@
                     .attr('width', width)
                     .attr('height', height)
                     .append('g')
-                    .attr('transform', 'translate(0, 8)');
-
-      // canvas.append('g')
-      //   .attr('transform', 'translate(0, ' + (height - 10) + ')')
-      //   .call(xAxis);
+                    .attr('transform', 'translate(0, 40)');
 
       canvas.append('g')
+        .attr('class', 'axis')
         .call(yAxis);
 
       var bars = canvas.append('g')
@@ -73,9 +70,10 @@
                       })
                       .on("mouseover", function(d) {
                         console.log(d3.select(this).attr('x'));
-                        var xPos = parseFloat(d3.select(this).attr('x')) + width * 1.8;
+                        var extra_left = (document.getElementById('page_speed').offsetWidth - width) / 2.0;
+                        var xPos = extra_left + parseFloat(d3.select(this).attr('x'));
                         console.log(xPos);
-                        var yPos = parseFloat(d3.select(this).attr('y')) + 70;
+                        var yPos = parseFloat(d3.select(this).attr('y')) + 170;
 
                         d3.select('#tooltip')
                           .style('left', xPos + 'px')
@@ -94,13 +92,13 @@
                         d3.select('#tooltip').classed('hidden', true);
                       });
 
-      var canvas = d3.select('#page_speed')
-                    .append('svg')
-                    .attr('width', width)
-                    .attr('height', height)
-                    .append('g')
-                    .attr('transform', 'translate(0,'+height+')')
-                    .call(xAxis);
+      // var canvas = d3.select('#page_speed')
+      //               .append('svg')
+      //               .attr('width', width)
+      //               .attr('height', height)
+      //               .append('g')
+      //               .attr('transform', 'translate(0,'+height+')')
+      //               .call(xAxis);
 
     })
   </script>

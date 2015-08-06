@@ -44,3 +44,11 @@ svg {
   font-size: 14px;
   line-height: 18px;
 }
+
+.axis .domain {
+  fill: white;
+}
+
+.axis > .tick > text {
+  font-family: Oswald, sans-serif;
+}
