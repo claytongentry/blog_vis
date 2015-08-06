@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
   <script>
 
-    var height = 450, width = 300, rect_width = 30, rect_padding = 2, data_len;
+    var height = 500, width = 300, rect_width = 30, rect_padding = 2, data_len;
 
     d3.json('data.json', function(data) {
 
@@ -34,8 +34,12 @@
         .domain(d3.range(data_len))
         .rangeRoundBands([40, width], 0.1);
 
+      var speed_min = Math.min.apply(Math, data.map(function(d) {return d.speed; }));
+      console.log(speed_min);
+      var speed_max = Math.max.apply(Math, data.map(function(d) {return d.speed; }));
+      console.log(speed_max);
       var yScale = d3.scale.linear()
-                    .domain([0, 100])
+                    .domain([(speed_min - 5), (speed_max + 5)])
                     .range([height, 0]);
 
       var xAxis = d3.svg.axis()
@@ -46,9 +50,7 @@
       var canvas = d3.select('#page_speed')
                     .append('svg')
                     .attr('width', width)
-                    .attr('height', height)
-                    .append('g')
-                    .attr('transform', 'translate(0, 40)');
+                    .attr('height', height);
 
       canvas.append('g')
         .attr('class', 'axis')
@@ -73,7 +75,7 @@
                         var extra_left = (document.getElementById('page_speed').offsetWidth - width) / 2.0;
                         var xPos = extra_left + parseFloat(d3.select(this).attr('x'));
                         console.log(xPos);
-                        var yPos = parseFloat(d3.select(this).attr('y')) + 170;
+                        var yPos = parseFloat(d3.select(this).attr('y')) + 130;
 
                         d3.select('#tooltip')
                           .style('left', xPos + 'px')
