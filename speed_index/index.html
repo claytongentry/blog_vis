@@ -34,7 +34,7 @@ d3.json('data.json', function(data) {
               .attr('height', height);
 
 
-  var n = 0, at_end = false; // sentinel values to call loop
+  var n = 0; // for knowing when to retreat()
   var circles = canvas.append('g')
     .attr('transform', 'translate(0, 40)')
     .selectAll('circle')
