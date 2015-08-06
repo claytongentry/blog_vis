@@ -64,8 +64,8 @@
                       .attr('class', 'bar')
                       .attr('width', xScale.rangeBand())
                       .attr('height', function(d) {return (yScale(0) - yScale(d.speed));})
-                      .attr('x', function(d, i) {return xScale(i);}) // TODO: This needs to be accurate
-                      .attr('y', function(d) {return yScale(d.speed);})// function(d) {return 0; })
+                      .attr('x', function(d, i) {return xScale(i);})
+                      .attr('y', function(d) {return yScale(d.speed);})
                       .attr('fill', function(d) {
                         if (d.pub === 'Inverse') return 'gold';
                         else return 'black';
