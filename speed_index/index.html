@@ -80,7 +80,7 @@ function retreat() {
 
 function onToVictory() {
   var i = 0; // for counting
-  $('#replay').fadeOut(function() {
+  $('#replay').fadeOut(50, function() {
     var circles = d3.selectAll('circle')
       .transition()
       .duration(function(d) {return d.speed / 2; })
