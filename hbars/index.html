@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href='http://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
+  <link type='text/css' rel='stylesheet' href='styles.css'>
+  <title>Inverse Speed Vis</title>
+</head>
+<body>
+
+  <h1>Inverse Speed</h1>
+  <hr/>
+
+  <div id="speed_vis"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+  <script>
+
+  var height = 500, width = 850, margin = 80, bar_height = 20, data_len;
+
+  d3.json('data.json', function(data) {
+
+    // Arrange from fastest to slowest
+    data_len = data.length;
+    data = data.sort(function(a, b) {
+      return b.pagespeed - a.pagespeed;
+    });
+
+    var widthScale = d3.scale.linear()
+      .domain([0, 100])
+      .range([0, width - 100]);
+
+    var heightScale = d3.scale.ordinal()
+      .domain(['Inverse', 'Vice', 'Quartz', 'HuffPo'])
+      .rangePoints([height, 0]);
+
+    var yAxis = d3.svg.axis()
+      .scale(heightScale)
+      .tickFormat(function(d) {return d.pub; });
+
+    var canvas=d3.select('#speed_vis')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', 'translate(0, 40)');
+
+    var gray_bars = canvas.append('g')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+        .append('rect')
+        .attr('width', function(d) {return widthScale(d.pagespeed); })
+        .attr('height', bar_height)
+        .attr('x', 0)
+        .attr('y', function(d, i) {return i * 40; })
+        .attr('fill', '#D3D3D3');
+
+    var black_bars = canvas.append('g')
+      .selectAll('rect')
+      .data(data)
+      .enter()
+        .append('rect')
+        .attr('height', bar_height)
+        .attr('width', 0)
+        .attr('x', 0)
+        .attr('y', function(d, i) {return i * 40; })
+        .attr('fill', 'gray')
+      .transition()
+        .duration(function(d) {return d.loadtime; })
+        .attr('width', function(d) {return widthScale(d.pagespeed); });
+
+    var page_speeds = canvas.append('g')
+      .selectAll('text')
+      .data(data)
+      .enter()
+        .append('text')
+        .attr('x', function(d) {return widthScale(d.pagespeed) + 10; })
+        .attr('y', function(d, i) {return i * 40 + 15; })
+        .attr('font-family', 'Oswald, sans-serif')
+        .attr('fill', 'gold')
+        .text(function(d) {return d.pagespeed; });
+
+
+    var loadtimes = canvas.append('g')
+      .selectAll('text')
+      .data(data)
+      .enter()
+        .append('text')
+        .attr('x', function (d) {return width - 100; })
+        .attr('y', function(d, i) {return i * 40 + 15; })
+        .attr('font-family', 'Oswald, sans-serif')
+        .attr('fill', 'gold')
+        .transition()
+          .duration(function(d) {return d.loadtime; })
+          .ease('linear')
+          .tween('text', function(d) {
+            var i = d3.interpolateRound(0, d.loadtime);
+            return function(t) {
+              this.textContent = i(t);
+            };
+        });
+
+    loadtimes.append('text')
+      .attr('x', 0)
+      .attr('y', -10)
+      .text('Hello')
+
+  });
+
+
+
+  </script>
+</body>
+</html>
