@@ -7,7 +7,7 @@
 </head>
 <body>
 
-  <h1>Inverse Speed</h1>
+  <h1>Speed Vis</h1>
   <hr/>
 
   <div id="speed_vis"></div>
@@ -31,11 +31,12 @@
 
     var heightScale = d3.scale.ordinal()
       .domain(['Inverse', 'Vice', 'Quartz', 'HuffPo'])
-      .rangePoints([height, 0]);
+      .rangePoints([0, height]);
 
     var yAxis = d3.svg.axis()
       .scale(heightScale)
-      .tickFormat(function(d) {return d.pub; });
+      .tickFormat(function(d) {return d.pub; })
+      .orient('left');
 
     var canvas=d3.select('#speed_vis')
       .append('svg')
@@ -96,10 +97,12 @@
           .tween('text', function(d) {
             var i = d3.interpolateRound(0, d.loadtime);
             return function(t) {
-              this.textContent = i(t);
+              this.textContent = (i(t)/1000).toFixed(2);
             };
         });
 
+    canvas.append('g')
+      .call(yAxis);
 
     // Add titles
     canvas.append('text')
